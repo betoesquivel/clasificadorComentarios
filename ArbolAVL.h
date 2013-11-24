@@ -24,8 +24,9 @@ class ArbolAVL
 {
 private:
 		NodoArbol<T> *raiz;
+		bool debug;
 public:
-		ArbolAVL() { raiz = NULL; }
+		ArbolAVL(bool debug) { raiz = NULL; this->debug = debug;}
 		NodoArbol<T>* getRaiz(){return raiz;}
 
 		//Balanceo AVL
@@ -41,7 +42,7 @@ public:
 		bool balanceado(NodoArbol<T> *inicial);
 		//Fin del BalanceoAVL
 
-		void insertar (T dato);
+		void insertar (T dato, string categoria);
 		bool existe (T dato);
 		int obtenerAltura(NodoArbol<T> *inicial);
 		int contarComparaciones(NodoArbol<T> *inicial, int comparaciones);
@@ -55,6 +56,9 @@ public:
 template <class T>
 void ArbolAVL<T>::balancear(NodoArbol<T> *pivote)
 {
+	if (debug) {
+		cout<<"DEBUG::Entro al metodo balancear con pivote: "<<pivote->info<<endl;
+	}
 	if (pivote->FB>0) {
 		if (pivote->der->FB > 0) {
 			pivote = rotacionSimpleIzquierda(pivote);
@@ -81,6 +85,9 @@ void ArbolAVL<T>::balancear(NodoArbol<T> *pivote)
 template <class T>
 NodoArbol<T>* ArbolAVL<T>::rotacionSimpleIzquierda(NodoArbol<T> *pivote)
 {
+	if (debug) {
+		cout<<"Hago rotacion simple a la izquierda."<<endl;
+	}
 	NodoArbol<T> *A, *B;
 	A = pivote->der;
 	B = pivote;
@@ -88,14 +95,23 @@ NodoArbol<T>* ArbolAVL<T>::rotacionSimpleIzquierda(NodoArbol<T> *pivote)
 	B->der = A->izq;
 	A->izq = B; 
 
-	(B->der)->padre = B; 
+	if(B->der != NULL){
+		(B->der)->padre = B; 
+	}
 	A->padre = B->padre;
 	B->padre = A; 
 
-	if (A->info < (A->padre)->info) {
-		(A->padre)->izq = A;
-	}else{
-		(A->padre)->der = A; 
+	if(A->padre != NULL)
+	{
+		if (A->info < (A->padre)->info) {
+			(A->padre)->izq = A;
+		}else{
+			(A->padre)->der = A; 
+		}
+	}
+	else
+	{
+		raiz = A; 
 	}
 
 	A->FB = B->FB = 0;
@@ -105,6 +121,9 @@ NodoArbol<T>* ArbolAVL<T>::rotacionSimpleIzquierda(NodoArbol<T> *pivote)
 template <class T>
 NodoArbol<T>* ArbolAVL<T>::rotacionSimpleDerecha(NodoArbol<T> *pivote)
 {
+	if (debug) {
+		cout<<"Hago rotacion simple a la derecha."<<endl;
+	}
 	NodoArbol<T> *A, *B;
 	A = pivote->izq;
 	B = pivote;
@@ -112,14 +131,23 @@ NodoArbol<T>* ArbolAVL<T>::rotacionSimpleDerecha(NodoArbol<T> *pivote)
 	B->izq = A->der;
 	A->der = B; 
 
-	(B->izq)->padre = B; 
+	if(B->izq != NULL){
+		(B->izq)->padre = B; 
+	}
 	A->padre = B->padre;
 	B->padre = A; 
 
-	if (A->info < (A->padre)->info) {
-		(A->padre)->izq = A;
-	}else{
-		(A->padre)->der = A; 
+	if(A->padre != NULL)
+	{
+		if (A->info < (A->padre)->info) {
+			(A->padre)->izq = A;
+		}else{
+			(A->padre)->der = A; 
+		}
+	}
+	else
+	{
+		raiz = A; 
 	}
 
 	A->FB = B->FB = 0;
@@ -129,6 +157,9 @@ NodoArbol<T>* ArbolAVL<T>::rotacionSimpleDerecha(NodoArbol<T> *pivote)
 template <class T>
 NodoArbol<T>* ArbolAVL<T>::rotacionDobleIzquierda(NodoArbol<T> *pivote)
 {
+	if (debug) {
+		cout<<"Hago rotacion doble a la izquierda."<<endl;
+	}
 	NodoArbol<T> *A, *B, *C, *aux;
 	A = pivote->der;
 	B = pivote;
@@ -142,16 +173,27 @@ NodoArbol<T>* ArbolAVL<T>::rotacionDobleIzquierda(NodoArbol<T> *pivote)
 	C->izq = B;
 	B->der = aux;
 
-	(B->der)->padre = B; 
-	(A->izq)->padre = A; 
+	if(B->der != NULL){
+		(B->der)->padre = B; 
+	}
+	if(A->izq != NULL){
+		(A->izq)->padre = A; 
+	}
 
 	A->padre = C; 
 	C->padre = B->padre;
 	B->padre = C;
-	if (C->info < C->padre) {
-		(C->padre)->izq = C;
-	}else{
-		(C->padre)->der = C;
+	if(C->padre != NULL)
+	{
+		if (C->info < (C->padre)->info) {
+			(C->padre)->izq = C;
+		}else{
+			(C->padre)->der = C; 
+		}
+	}
+	else
+	{
+		raiz = C; 
 	}
 
 	C->FB = 0;
@@ -163,6 +205,9 @@ NodoArbol<T>* ArbolAVL<T>::rotacionDobleIzquierda(NodoArbol<T> *pivote)
 template <class T>
 NodoArbol<T>* ArbolAVL<T>::rotacionDobleDerecha(NodoArbol<T> *pivote)
 {
+	if (debug) {
+		cout<<"Hago rotacion doble a la derecha."<<endl;
+	}
 	NodoArbol<T> *A, *B, *C, *aux;
 	A = pivote;
 	B = pivote->izq;
@@ -176,16 +221,27 @@ NodoArbol<T>* ArbolAVL<T>::rotacionDobleDerecha(NodoArbol<T> *pivote)
 	C->izq = B;
 	B->der = aux;
 
-	(B->der)->padre = B; 
-	(A->izq)->padre = A; 
+	if(B->der != NULL){
+		(B->der)->padre = B; 
+	}
+	if(A->izq != NULL){
+		(A->izq)->padre = A; 
+	}
 
 	B->padre = C; 
 	C->padre = A->padre;
 	A->padre = C;
-	if (C->info < C->padre) {
-		(C->padre)->izq = C;
-	}else{
-		(C->padre)->der = C;
+	if(C->padre != NULL)
+	{
+		if (C->info < (C->padre)->info) {
+			(C->padre)->izq = C;
+		}else{
+			(C->padre)->der = C; 
+		}
+	}
+	else
+	{
+		raiz = C; 
 	}
 
 	C->FB = 0;
@@ -226,9 +282,9 @@ void libera (NodoArbol<T>* raiz)
 }
 
 template <class T>
-void ArbolAVL<T>::insertar (T valor)
+void ArbolAVL<T>::insertar (T valor, string categoria)
 { //Precondición: el valor no existe en el árbol.
-	NodoArbol<T> *NuevoNodo = new NodoArbol<T>(valor);
+	NodoArbol<T> *NuevoNodo = new NodoArbol<T>(valor, categoria);
 	NodoArbol<T> *actual = raiz, *anterior = NULL, *pivote = NULL;
 	while (actual != NULL)
 	{
@@ -315,11 +371,8 @@ void ArbolAVL<T>::desplegarArbol(NodoArbol<T> *inicial)
 {
 	if(inicial!=NULL)
 	{
-		if(inicial->izq != NULL || inicial->der != NULL)
-			cout<<"Padre: "<<inicial->info<<endl;
-		else
-			cout<<"Hoja: "<<inicial->info<<endl;
 		desplegarArbol(inicial->izq);
+		cout<<inicial->info<<endl;
 		desplegarArbol(inicial->der);
 	}
 }

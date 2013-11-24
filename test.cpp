@@ -26,6 +26,18 @@ using namespace std;
 int main(int argc, const char *argv[])
 {
 	cout<<"Compila."<<endl;	
+	ArbolAVL<string> lista(true);
+
+	string entrada = "";	
+	string categoria = "prueba";
+	while(entrada!="0")
+	{
+		cin>>entrada;
+		if(entrada!="0"){
+			lista.insertar(entrada, categoria);
+		}
+	}
+	lista.desplegarArbol(lista.getRaiz());
 	return 0;
 }
 
