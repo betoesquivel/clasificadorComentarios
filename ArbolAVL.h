@@ -44,7 +44,7 @@ public:
 		void insertar (T dato);
 		bool existe (T dato);
 		int obtenerAltura(NodoArbol<T> *inicial);
-		int contarComparaciones(NodoArbol<T> *inicial);
+		int contarComparaciones(NodoArbol<T> *inicial, int comparaciones);
 		void desplegarArbol(NodoArbol<T> *inicial);
 		void desplegarArbolNivelPorNivel();
 
@@ -195,7 +195,7 @@ NodoArbol<T>* ArbolAVL<T>::rotacionDobleDerecha(NodoArbol<T> *pivote)
 }
 
 template <class T>
-int ArbolAVL<T>:calcularFB(NodoArbol<T> *inicial)
+int ArbolAVL<T>::calcularFB(NodoArbol<T> *inicial)
 {
 	return ( obtenerAltura(inicial->der) - obtenerAltura(inicial->izq) );
 }
@@ -206,7 +206,7 @@ bool ArbolAVL<T>::balanceado(NodoArbol<T> *inicial)
 	if(inicial==NULL){
 		return true;
 	}else{
-		int FB = calcularFB(NodoArbol<T> *inicial);
+		int FB = calcularFB(inicial);
 		if (FB>=-1 || FB<=1) {
 			return (balanceado(inicial->izq) && balanceado(inicial->der));
 		}else{
