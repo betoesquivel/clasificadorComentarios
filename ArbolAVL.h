@@ -1,7 +1,8 @@
 
-#include <iostream>
-
-using namespace std;
+// #include <iostream>
+// #include <queue>
+// 
+// using namespace std;
 
 template <class T>
 class NodoArbol
@@ -68,8 +69,12 @@ void ArbolAVL<T>::balancear(NodoArbol<T> *pivote)
 		}
 	}
 
-	if ((pivote->padre)->FB>1 || (pivote->padre)->FB<-1) {
-		balancear(pivote->padre);
+	while(pivote!=raiz)
+	{
+		pivote = pivote->padre;
+		if (pivote->FB>1 || pivote->FB<-1) {
+			balancear(pivote);
+		}
 	}
 }
 
@@ -224,16 +229,46 @@ template <class T>
 void ArbolAVL<T>::insertar (T valor)
 { //Precondición: el valor no existe en el árbol.
 	NodoArbol<T> *NuevoNodo = new NodoArbol<T>(valor);
-	NodoArbol<T> *actual = raiz, *anterior = NULL;
+	NodoArbol<T> *actual = raiz, *anterior = NULL, *pivote = NULL;
 	while (actual != NULL)
 	{
 		anterior=actual;
-		actual=(actual->info>valor? actual->izq: actual->der);
+
+		if (valor < actual->info) {
+			actual->FB -= 1; 
+			if (actual->FB<-1) {
+				pivote = actual;
+			}
+				
+			actual = actual->izq;
+		}else{
+			actual->FB += 1; 
+			if (actual->FB>1) {
+				pivote = actual;
+			}
+
+			actual = actual->der;
+		}
 	}
-	if (anterior==NULL)	raiz = NuevoNodo;
+
+	if (anterior==NULL)	
+	{
+		raiz = NuevoNodo;
+	}
 	else
-		if (anterior->info > valor) anterior->izq = NuevoNodo;
-		else anterior->der = NuevoNodo;
+	{
+		if (valor < anterior->info) 
+		{
+			anterior->izq = NuevoNodo;
+		}
+		else 
+		{
+			anterior->der = NuevoNodo;
+		}
+	}
+	if(pivote!=NULL){
+		balancear(pivote);
+	}
 }
 
 template <class T>
