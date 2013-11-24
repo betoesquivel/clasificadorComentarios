@@ -24,7 +24,7 @@ class ArbolAVL
 private:
 		NodoArbol<T> *raiz;
 public:
-		ABB() { raiz = NULL; }
+		ArbolAVL() { raiz = NULL; }
 		NodoArbol<T>* getRaiz(){return raiz;}
 
 		void balancear(NodoArbol<T> *pivote);
@@ -37,12 +37,12 @@ public:
 
 		void insertar (T dato);
 		bool existe (T dato);
-		int contarComparaciones(NodoArbol<T> *inicial);
 		int obtenerAltura(NodoArbol<T> *inicial);
+		int contarComparaciones(NodoArbol<T> *inicial);
 		void desplegarArbol(NodoArbol<T> *inicial);
 		void desplegarArbolNivelPorNivel();
 
-		~ABB() { libera(raiz); }
+		~ArbolAVL() { libera(raiz); }
 };
 
 template <class T>
@@ -56,7 +56,7 @@ void libera (NodoArbol<T>* raiz)
 }
 
 template <class T>
-void ABB<T>::insertar (T valor)
+void ArbolAVL<T>::insertar (T valor)
 { //Precondición: el valor no existe en el árbol.
 	NodoArbol<T> *NuevoNodo = new NodoArbol<T>(valor);
 	NodoArbol<T> *actual = raiz, *anterior = NULL;
@@ -72,7 +72,7 @@ void ABB<T>::insertar (T valor)
 }
 
 template <class T>
-bool ABB<T>::existe(T dato)
+bool ArbolAVL<T>::existe(T dato)
 {
 	NodoArbol<T> *aux = raiz;
 	while (aux != NULL && aux->info != dato)
@@ -81,7 +81,37 @@ bool ABB<T>::existe(T dato)
 }
 
 template <class T>
-void ABB<T>::desplegarArbol(NodoArbol<T> *inicial)
+int ArbolAVL<T>::obtenerAltura(NodoArbol<T> *inicial)
+{
+	int altura_izquierdo, altura_derecho;
+	if(inicial!=NULL)
+	{
+		altura_izquierdo = obtenerAltura(inicial->izq);
+		altura_derecho = obtenerAltura(inicial->der);
+		return (altura_izquierdo > altura_derecho) ? (altura_izquierdo+1):(altura_derecho+1);
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+template <class T>
+int ArbolAVL<T>::contarComparaciones (NodoArbol<T>* raiz, int comparaciones)
+{
+	if (raiz != NULL) {
+		return (
+			 comparaciones 
+			 + contarComparaciones(raiz->izq, comparaciones+1)
+			 + contarComparaciones(raiz->der, comparaciones+1)
+		);
+	}else{
+		return 0;
+	}
+}
+
+template <class T>
+void ArbolAVL<T>::desplegarArbol(NodoArbol<T> *inicial)
 {
 	if(inicial!=NULL)
 	{
@@ -95,7 +125,7 @@ void ABB<T>::desplegarArbol(NodoArbol<T> *inicial)
 }
 
 template <class T>
-void ABB<T>::desplegarArbolNivelPorNivel()
+void ArbolAVL<T>::desplegarArbolNivelPorNivel()
 {
 	queue< NodoArbol<T>* > fila;
 	fila.push(raiz);
