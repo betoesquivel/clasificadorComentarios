@@ -27,13 +27,18 @@ public:
 		ArbolAVL() { raiz = NULL; }
 		NodoArbol<T>* getRaiz(){return raiz;}
 
+		//Balanceo AVL
 		void balancear(NodoArbol<T> *pivote);
-		void rotacionSimpleDerecha(NodoArbol<T> *pivote);
-		void rotacionSimpleIzquierda(NodoArbol<T> *pivote);
-		void rotacionDobleDerecha(NodoArbol<T> *pivote);
-		void rotacionDobleIzquierda(NodoArbol<T> *pivote);
+		
+		NodoArbol<T>* rotacionSimpleIzquierda(NodoArbol<T> *pivote);
+		NodoArbol<T>* rotacionSimpleDerecha(NodoArbol<T> *pivote);
 
+		NodoArbol<T>* rotacionDobleIzquierda(NodoArbol<T> *pivote);
+		NodoArbol<T>* rotacionDobleDerecha(NodoArbol<T> *pivote);
+
+		int calcularFB(NodoArbol<T> *inicial);
 		bool balanceado(NodoArbol<T> *inicial);
+		//Fin del BalanceoAVL
 
 		void insertar (T dato);
 		bool existe (T dato);
@@ -44,6 +49,166 @@ public:
 
 		~ArbolAVL() { libera(raiz); }
 };
+
+
+template <class T>
+void ArbolAVL<T>::balancear(NodoArbol<T> *pivote)
+{
+	if (pivote->FB>0) {
+		if (pivote->der->FB > 0) {
+			pivote = rotacionSimpleIzquierda(pivote);
+		}else{
+			pivote = rotacionDobleIzquierda(pivote);
+		}
+	}else{
+		if (pivote->izq->FB > 0) {
+			pivote = rotacionSimpleDerecha(pivote);
+		}else{
+			pivote = rotacionDobleDerecha(pivote);
+		}
+	}
+
+	if ((pivote->padre)->FB>1 || (pivote->padre)->FB<-1) {
+		balancear(pivote->padre);
+	}
+}
+
+template <class T>
+NodoArbol<T>* ArbolAVL<T>::rotacionSimpleIzquierda(NodoArbol<T> *pivote)
+{
+	NodoArbol<T> *A, *B;
+	A = pivote->der;
+	B = pivote;
+
+	B->der = A->izq;
+	A->izq = B; 
+
+	(B->der)->padre = B; 
+	A->padre = B->padre;
+	B->padre = A; 
+
+	if (A->info < (A->padre)->info) {
+		(A->padre)->izq = A;
+	}else{
+		(A->padre)->der = A; 
+	}
+
+	A->FB = B->FB = 0;
+	return A;
+}
+
+template <class T>
+NodoArbol<T>* ArbolAVL<T>::rotacionSimpleDerecha(NodoArbol<T> *pivote)
+{
+	NodoArbol<T> *A, *B;
+	A = pivote->izq;
+	B = pivote;
+
+	B->izq = A->der;
+	A->der = B; 
+
+	(B->izq)->padre = B; 
+	A->padre = B->padre;
+	B->padre = A; 
+
+	if (A->info < (A->padre)->info) {
+		(A->padre)->izq = A;
+	}else{
+		(A->padre)->der = A; 
+	}
+
+	A->FB = B->FB = 0;
+	return A;
+}
+
+template <class T>
+NodoArbol<T>* ArbolAVL<T>::rotacionDobleIzquierda(NodoArbol<T> *pivote)
+{
+	NodoArbol<T> *A, *B, *C, *aux;
+	A = pivote->der;
+	B = pivote;
+	C = (pivote->der)->izq;
+
+	aux = C->der;
+	C->der = A;
+	A->izq = aux;
+
+	aux = C->izq;
+	C->izq = B;
+	B->der = aux;
+
+	(B->der)->padre = B; 
+	(A->izq)->padre = A; 
+
+	A->padre = C; 
+	C->padre = B->padre;
+	B->padre = C;
+	if (C->info < C->padre) {
+		(C->padre)->izq = C;
+	}else{
+		(C->padre)->der = C;
+	}
+
+	C->FB = 0;
+	A->FB = calcularFB(A);
+	B->FB = calcularFB(B);
+	return C;
+}
+
+template <class T>
+NodoArbol<T>* ArbolAVL<T>::rotacionDobleDerecha(NodoArbol<T> *pivote)
+{
+	NodoArbol<T> *A, *B, *C, *aux;
+	A = pivote;
+	B = pivote->izq;
+	C = (pivote->izq)->der;
+
+	aux = C->der;
+	C->der = A;
+	A->izq = aux;
+
+	aux = C->izq;
+	C->izq = B;
+	B->der = aux;
+
+	(B->der)->padre = B; 
+	(A->izq)->padre = A; 
+
+	B->padre = C; 
+	C->padre = A->padre;
+	A->padre = C;
+	if (C->info < C->padre) {
+		(C->padre)->izq = C;
+	}else{
+		(C->padre)->der = C;
+	}
+
+	C->FB = 0;
+	A->FB = calcularFB(A);
+	B->FB = calcularFB(B);
+	return C;
+}
+
+template <class T>
+int ArbolAVL<T>:calcularFB(NodoArbol<T> *inicial)
+{
+	return ( obtenerAltura(inicial->der) - obtenerAltura(inicial->izq) );
+}
+	
+template <class T>
+bool ArbolAVL<T>::balanceado(NodoArbol<T> *inicial)
+{
+	if(inicial==NULL){
+		return true;
+	}else{
+		int FB = calcularFB(NodoArbol<T> *inicial);
+		if (FB>=-1 || FB<=1) {
+			return (balanceado(inicial->izq) && balanceado(inicial->der));
+		}else{
+			return false;
+		}
+	}
+}
 
 template <class T>
 void libera (NodoArbol<T>* raiz) 
