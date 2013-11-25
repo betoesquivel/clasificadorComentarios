@@ -115,6 +115,9 @@ NodoArbol<T>* ArbolAVL<T>::rotacionSimpleIzquierda(NodoArbol<T> *pivote)
 	}
 
 	A->FB = B->FB = 0;
+	if (debug) {
+		desplegarArbol(raiz);
+	}
 	return A;
 }
 
@@ -151,6 +154,9 @@ NodoArbol<T>* ArbolAVL<T>::rotacionSimpleDerecha(NodoArbol<T> *pivote)
 	}
 
 	A->FB = B->FB = 0;
+	if (debug) {
+		desplegarArbol(raiz);
+	}
 	return A;
 }
 
@@ -185,6 +191,7 @@ NodoArbol<T>* ArbolAVL<T>::rotacionDobleIzquierda(NodoArbol<T> *pivote)
 	B->padre = C;
 	if(C->padre != NULL)
 	{
+		if(debug){cout<<"El padre de C es: "<<C->padre->info<<endl;}
 		if (C->info < (C->padre)->info) {
 			(C->padre)->izq = C;
 		}else{
@@ -193,12 +200,16 @@ NodoArbol<T>* ArbolAVL<T>::rotacionDobleIzquierda(NodoArbol<T> *pivote)
 	}
 	else
 	{
+		if(debug){cout<<"C es la raiz: "<<endl;}
 		raiz = C; 
 	}
 
 	C->FB = 0;
 	A->FB = calcularFB(A);
 	B->FB = calcularFB(B);
+	if (debug) {
+		desplegarArbol(raiz);
+	}
 	return C;
 }
 
@@ -247,6 +258,9 @@ NodoArbol<T>* ArbolAVL<T>::rotacionDobleDerecha(NodoArbol<T> *pivote)
 	C->FB = 0;
 	A->FB = calcularFB(A);
 	B->FB = calcularFB(B);
+	if (debug) {
+		desplegarArbol(raiz);
+	}
 	return C;
 }
 
@@ -321,6 +335,7 @@ void ArbolAVL<T>::insertar (T valor, string categoria)
 		{
 			anterior->der = NuevoNodo;
 		}
+		NuevoNodo->padre = anterior;
 	}
 	if(pivote!=NULL){
 		balancear(pivote);
