@@ -5,18 +5,63 @@
 // que tiene en el árbol. Tal vez pueda utilizar mejor una priorityqueue para
 // las palabras.
 // 
+// A partir de un archivo de entrada, genero un archivo de salida (especificado por el usuario)
+// que tiene los comentarios clasificados.
+//
+//pendiente...
+// Voy guardando los comentarios clasificados en dos listas 
+// de strings paralelos. Uno contiene el comentario y otro contiene
+// la categoria. 
+//
 // Autor: José Alberto Esquivel Patino A01139626
 // Carrera: BCT
 // Clase: Estructura de Datos
 // Profesor: Roman Martinez Martinez
 //
-#include <queue>
+//ocupo <fstream> y <iostream>
 class clasificador{
 	private: 
-		priority_queue<string> clave_biblioteca;
-		priority_queue<string> clave_informatica;
-		priority_queue<string> clave_tesoreria;
+		ArbolAVL<string> palabrasClave(false);
+		string nom_ArchivoComentarios;
+		string nom_ArchivoPalabrasClave;
+		string nom_ArchivoSalida; 
+
 	public:
-		clasificador(string nombreArchivoBaseDeDatos); 
+		clasificador(string nombreArchivoComentarios, string nombreArchivoSalida);
 		string clasificar(string comentario);
+		void llenarArbolPalabrasClave();
+		void escribirComentarioEnArchivo(string comentario, string categoria);
 };
+
+clasificador::clasificador(string nombreArchivoComentarios, string nombreArchivoSalida, string nombreArchivoPalabrasClave)
+{
+	nom_ArchivoComentarios = nombreArchivoComentarios;
+	nom_ArchivoSalida = nombreArchivoSalida;
+	nom_ArchivoPalabrasClave = nombreArchivoPalabrasClave;
+}
+
+void clasificador::llenarArbolPalabrasClave()
+{
+	ifstream archivoPalabrasClave;
+	archivoPalabrasClave.open(nom_ArchivoPalabrasClave.c_str());
+	string palabra, categoria;
+	while(archivoPalabrasClave>>palabra>>categoria)
+	{
+		palabrasClave.insert(palabra,categoria);
+	}
+
+	archivoPalabrasClave.close();	
+}
+
+void clasificador::escribirComentarioEnArchivo(string comentario, string categoria)
+{
+	ofstream archivoSalida;
+	archivoSalida.open(nom_ArchivoSalida.c_str());
+	archivoSalida<<"<"<<categoria<<">"<<endl;
+	archivoSalida<<comentario<<endl;
+	archivoSalida<<endl;
+
+	archivoSalida.close();
+}
+
+
