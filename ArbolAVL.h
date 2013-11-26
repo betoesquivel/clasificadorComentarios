@@ -13,7 +13,6 @@ class NodoArbol
 	int FB;
 	//Factor de Balance del nodo en un árbol AVL = Altura del subarbol derecho - altura del subarbol izquierdo;
 	//Vale 0 si las alturas son iguales, 1 si el subárbol derecho es más alto y -1 si el izquierdo es más alto
-
 	NodoArbol<T> *izq, *der, *padre;
 	NodoArbol() { izq = der = padre = NULL; }
 	NodoArbol(T dato, string categoria) { info = dato; this->categoria = categoria; FB = 0; izq = der = padre = NULL; }
@@ -66,13 +65,19 @@ void ArbolAVL<T>::balancear(NodoArbol<T> *pivote)
 			pivote = rotacionDobleIzquierda(pivote);
 		}
 	}else{
-		if (pivote->izq->FB > 0) {
+		if (pivote->izq->FB < 0) {
 			pivote = rotacionSimpleDerecha(pivote);
 		}else{
 			pivote = rotacionDobleDerecha(pivote);
 		}
 	}
-
+	//calculo el FB de todos los padres
+	NodoArbol<T> *aux = pivote; 
+	while(aux!=raiz)
+	{
+		aux = aux->padre;
+		aux->FB = calcularFB(aux);
+	}	
 	while(pivote!=raiz)
 	{
 		pivote = pivote->padre;
@@ -267,7 +272,13 @@ NodoArbol<T>* ArbolAVL<T>::rotacionDobleDerecha(NodoArbol<T> *pivote)
 template <class T>
 int ArbolAVL<T>::calcularFB(NodoArbol<T> *inicial)
 {
-	return ( obtenerAltura(inicial->der) - obtenerAltura(inicial->izq) );
+	int factorBalance = obtenerAltura(inicial->der) - obtenerAltura(inicial->izq);
+	if (debug) {
+		if(factorBalance>1 || factorBalance<-1){
+			cout<<"DEBUG::Para "<<inicial->info<<"\nHubo un error con el factor balance: "<<factorBalance<<endl;
+		}
+	}
+	return ( factorBalance  );
 }
 	
 template <class T>
@@ -302,6 +313,10 @@ void ArbolAVL<T>::insertar (T valor, string categoria)
 	NodoArbol<T> *actual = raiz, *anterior = NULL, *pivote = NULL;
 	while (actual != NULL)
 	{
+		if (debug && anterior!=NULL) {
+			cout<<"DEBUG::El valor anterior es: "<<anterior->info<<endl;
+			cout<<"DEBUG::El valor anterior tiene un FB de: "<<anterior->FB<<endl;
+		}
 		anterior=actual;
 
 		if (valor < actual->info) {
@@ -384,10 +399,11 @@ int ArbolAVL<T>::contarComparaciones (NodoArbol<T>* raiz, int comparaciones)
 template <class T>
 void ArbolAVL<T>::desplegarArbol(NodoArbol<T> *inicial)
 {
+
 	if(inicial!=NULL)
 	{
 		desplegarArbol(inicial->izq);
-		cout<<inicial->info<<endl;
+		cout<<inicial->info<<" "<<inicial->FB<<endl;
 		desplegarArbol(inicial->der);
 	}
 }
