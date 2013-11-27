@@ -25,8 +25,11 @@ private:
 		NodoArbol<T> *raiz;
 		bool debug;
 public:
+		ArbolAVL() { raiz = NULL; this->debug = false;}
 		ArbolAVL(bool debug) { raiz = NULL; this->debug = debug;}
 		NodoArbol<T>* getRaiz(){return raiz;}
+		
+		void setDebug(bool d) { debug = d; } 
 
 		//Balanceo AVL
 		void balancear(NodoArbol<T> *pivote);

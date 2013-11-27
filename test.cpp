@@ -18,10 +18,12 @@
 
 #include <iostream>
 #include <queue>
+#include <fstream>
 
 using namespace std;
 
 #include "ArbolAVL.h"
+#include "clasificador.h"
 
 int main(int argc, const char *argv[])
 {

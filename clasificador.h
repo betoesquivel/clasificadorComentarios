@@ -19,25 +19,30 @@
 // Profesor: Roman Martinez Martinez
 //
 //ocupo <fstream> y <iostream>
+bool debug = false;
 class clasificador{
 	private: 
-		ArbolAVL<string> palabrasClave(false);
+		ArbolAVL<string> palabrasClave;
+		ArbolAVL<string> palabrasIgnoradas;
 		string nom_ArchivoComentarios;
 		string nom_ArchivoPalabrasClave;
+		string nom_ArchivoPalabrasIgnoradas;
 		string nom_ArchivoSalida; 
 
 	public:
-		clasificador(string nombreArchivoComentarios, string nombreArchivoSalida);
+		clasificador(string nombreArchivoComentarios, string nombreArchivoSalida, string nombreArchivoPalabrasClave, string nombreArchivoPalabrasIgnoradas);
 		string clasificar(string comentario);
 		void llenarArbolPalabrasClave();
+		void llenarArbolPalabrasIgnoradas();
 		void escribirComentarioEnArchivo(string comentario, string categoria);
 };
 
-clasificador::clasificador(string nombreArchivoComentarios, string nombreArchivoSalida, string nombreArchivoPalabrasClave)
+clasificador::clasificador(string nombreArchivoComentarios, string nombreArchivoSalida, string nombreArchivoPalabrasClave, string nombreArchivoPalabrasIgnoradas)
 {
 	nom_ArchivoComentarios = nombreArchivoComentarios;
 	nom_ArchivoSalida = nombreArchivoSalida;
 	nom_ArchivoPalabrasClave = nombreArchivoPalabrasClave;
+	nom_ArchivoPalabrasIgnoradas = nombreArchivoPalabrasIgnoradas;
 }
 
 void clasificador::llenarArbolPalabrasClave()
@@ -47,10 +52,21 @@ void clasificador::llenarArbolPalabrasClave()
 	string palabra, categoria;
 	while(archivoPalabrasClave>>palabra>>categoria)
 	{
-		palabrasClave.insert(palabra,categoria);
+		palabrasClave.insertar(palabra,categoria);
 	}
-
 	archivoPalabrasClave.close();	
+}
+
+void clasificador::llenarArbolPalabrasIgnoradas()
+{
+	ifstream archivoPalabrasIgnoradas;
+	archivoPalabrasIgnoradas.open(nom_ArchivoPalabrasIgnoradas.c_str());
+	string palabra, categoria = "ignorada";
+	while(archivoPalabrasIgnoradas>>palabra)
+	{
+		palabrasIgnoradas.insertar(palabra,categoria);
+	}
+	archivoPalabrasIgnoradas.close();	
 }
 
 void clasificador::escribirComentarioEnArchivo(string comentario, string categoria)
