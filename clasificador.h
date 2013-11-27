@@ -192,29 +192,42 @@ void clasificador::clasificarComentario(string comentario)
 	convertirAMinusculas(temp);
 
 	istringstream iss(temp);
-	string palabra; 
+	string palabra = ""; 
 	while(iss>>palabra){
 		clasificarPalabra(palabra);
 		cout<<"Termine de clsificar la palabra.."<<endl;
 		cout<<palabra<<'.'<<endl;
 	}
-	iss.str(string());
-	iss.clear();
+	// unsigned int i = 0;
+	// while (i < temp.length()) {
+	// 	if (temp[i]==' ') {
+	// 		trim(palabra);
+	// 		// clasificarPalabra(palabra);
+	// 		cout<<palabra<<endl;
+	// 		palabra = "";
+	// 	}else{
+	// 		palabra+=temp[i];
+	// 	}
+	// 	
+	// 	i++;		
+	// }
 	cout<<"salgo del while"<<endl;
+
 	if(categoriaMayor == NULL){
 		cout<<"No pude clasificar ese comentario."<<endl;
 	}else{
-		escribirComentarioEnArchivo(comentario,categoriaMayor->info);
+		// escribirComentarioEnArchivo(comentario,categoriaMayor->info);
 	}
 
-	if (debug) {
-		cout<<"DEBUG::Categoria del comentario: "<<categoriaMayor->info<<endl;
-		cout<<"---------DEBUG-----------"<<endl;
-		cout<<comentario<<endl;
-		cout<<"DEBUG::Comentario contaba con "<<categoriaMayor->info2<<" coincidencias"<<endl;
-	}
+	// if (debug) {
+	// 	cout<<"DEBUG::Categoria del comentario: "<<categoriaMayor->info<<endl;
+	// 	cout<<"---------DEBUG-----------"<<endl;
+	// 	cout<<comentario<<endl;
+	// 	cout<<"DEBUG::Comentario contaba con "<<categoriaMayor->info2<<" coincidencias"<<endl;
+	// }
 
-	resetearContadorCategorias(categorias.getRaiz());
+	//bug 2
+	// resetearContadorCategorias(categorias.getRaiz());
 	categoriaMayor=NULL;
 }
 
@@ -252,6 +265,7 @@ void clasificador::clasificarArchivoDeComentarios()
 	archivoComentarios.close();
 }
 
+//bug 1
 void clasificador::escribirComentarioEnArchivo(string comentario, string categoria)
 {
 	if(debug)
