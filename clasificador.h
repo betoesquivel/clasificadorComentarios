@@ -135,10 +135,10 @@ void clasificador::clasificarPalabra(string palabra)
 	}
 	if(!palabrasIgnoradas.existe(palabra)){
 		NodoArbol<string, string> *palabraEncontrada = palabrasClave.encontrar(palabra);		
-		if (debug) {
-			cout<<"Palabra encontrada en claves: "<<palabraEncontrada->info<<endl;
-		}
 		if (palabraEncontrada!=NULL) {
+			if (debug) {
+				cout<<"Palabra encontrada en claves: "<<palabraEncontrada->info<<endl;
+			}
 			NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
 			categoriaEncontrada->info2 += 1; 
 
@@ -195,6 +195,16 @@ void clasificador::clasificarComentario(string comentario)
 	string palabra; 
 	while(iss>>palabra){
 		clasificarPalabra(palabra);
+		cout<<"Termine de clsificar la palabra.."<<endl;
+		cout<<palabra<<'.'<<endl;
+	}
+	iss.str(string());
+	iss.clear();
+	cout<<"salgo del while"<<endl;
+	if(categoriaMayor == NULL){
+		cout<<"No pude clasificar ese comentario."<<endl;
+	}else{
+		escribirComentarioEnArchivo(comentario,categoriaMayor->info);
 	}
 
 	if (debug) {
@@ -204,8 +214,8 @@ void clasificador::clasificarComentario(string comentario)
 		cout<<"DEBUG::Comentario contaba con "<<categoriaMayor->info2<<" coincidencias"<<endl;
 	}
 
-	escribirComentarioEnArchivo(comentario,categoriaMayor->info);
 	resetearContadorCategorias(categorias.getRaiz());
+	categoriaMayor=NULL;
 }
 
 void clasificador::clasificarArchivoDeComentarios()
@@ -244,8 +254,14 @@ void clasificador::clasificarArchivoDeComentarios()
 
 void clasificador::escribirComentarioEnArchivo(string comentario, string categoria)
 {
+	if(debug)
+		cout<<"escribiendo el comentario"<<endl;
 	ofstream archivoSalida;
+	if(debug)
+		cout<<"abro el archivo"<<endl;
 	archivoSalida.open(nom_ArchivoSalida.c_str());
+	if(debug)
+		cout<<"imprimo la categoria en el archivo rodeada de llaves"<<endl;
 	archivoSalida<<"<"<<categoria<<">"<<endl;
 	archivoSalida<<comentario<<endl;
 	archivoSalida<<endl;

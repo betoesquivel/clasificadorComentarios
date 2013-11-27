@@ -38,7 +38,7 @@ int main(int argc, const char *argv[])
 	nArchPalabrasClave = "palabrasClave.txt";
 	nArchPalabrasIgnoradas = "palabrasIgnoradas.txt";
 	nArchSalida = "salidaEjemplo.txt";
-
+ 
 	// cout<<"Introduzca el nombre del archivo con los comentarios: "<<endl;
 	// cin>>nArchComentarios;
 
