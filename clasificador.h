@@ -129,13 +129,26 @@ void clasificador::llenarArbolPalabrasIgnoradas()
 
 void clasificador::clasificarPalabra(string palabra)
 {
+	if (debug) {
+		cout<<"DEBUG::Buscando palabra en el arbol de palabras clave."<<endl;
+		cout<<palabra<<endl;
+	}
 	if(!palabrasIgnoradas.existe(palabra)){
 		NodoArbol<string, string> *palabraEncontrada = palabrasClave.encontrar(palabra);		
-		NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
+		if (debug) {
+			cout<<"Palabra encontrada en claves: "<<palabraEncontrada->info<<endl;
+		}
+		if (palabraEncontrada!=NULL) {
+			NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
+			categoriaEncontrada->info2 += 1; 
 
-		categoriaEncontrada->info2 += 1; 
+			if(categoriaMayor!=NULL){
+				categoriaMayor = (categoriaMayor->info2 < categoriaEncontrada->info2) ? categoriaEncontrada:categoriaMayor;	
+			}else{
+				categoriaMayor = categoriaEncontrada;
+			}
+		}		
 
-		categoriaMayor = (categoriaMayor->info2 < categoriaEncontrada->info2) ? categoriaEncontrada:categoriaMayor;	
 	}else{
 		if (debug) {
 			cout<<"DEBUG::Esa palabra la ignoro: "<<palabra<<endl;
@@ -201,11 +214,14 @@ void clasificador::clasificarArchivoDeComentarios()
 	archivoComentarios.open(nom_ArchivoComentarios.c_str());
 	if (debug) {
 		cout<<"DEBUG::Abro el archivo con los comentarios."<<endl;
+		cout<<"DEBUG:: "<<nom_ArchivoComentarios<<endl;
 	}
 	string linea, comentario = "";
-	cin.ignore();
 	while(!archivoComentarios.eof()){
 		getline(archivoComentarios, linea);
+		if(debug) {
+			cout<<"Linea: "<<linea<<endl;
+		}
 		if(linea == ""){
 			if (debug) {
 				cout<<"DEBUG::Salto de linea en el archivo."<<endl;
@@ -214,7 +230,7 @@ void clasificador::clasificarArchivoDeComentarios()
 			comentario = "";
 		}else{
 			trim(linea);
-			comentario += " \n";
+			comentario += "\n ";
 			comentario += linea;
 		}
 	}

@@ -34,7 +34,7 @@ int main(int argc, const char *argv[])
 	cout<<"Bienvenido al programa de clasificacion de comentarios."<<endl;	
 	string nArchComentarios, nArchPalabrasClave, nArchPalabrasIgnoradas, nArchSalida;  	
 
-	nArchComentarios = "pruebaComentarios.txt";
+	nArchComentarios = "comentariosPrueba.txt";
 	nArchPalabrasClave = "palabrasClave.txt";
 	nArchPalabrasIgnoradas = "palabrasIgnoradas.txt";
 	nArchSalida = "salidaEjemplo.txt";
@@ -65,6 +65,9 @@ int main(int argc, const char *argv[])
 	bob.desplegarPalabrasIgnoradas();
 	
 	bob.clasificarArchivoDeComentarios();
+	cout<<endl;
+	cout<<"========================================================================"<<endl;
+	cout<<"Gracias por utilizar la aplicación. Se ha generado el archivo de salida: "<<nArchSalida<<endl;
 
 	// ArbolAVL<string, string> lista(true);
 	// 

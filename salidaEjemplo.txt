@@ -1,0 +1,4 @@
+<cafeteria>
+
+ Este es un enunciado de entrada de una linea.
+
