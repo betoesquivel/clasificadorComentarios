@@ -58,6 +58,10 @@ class clasificador{
 		void llenarArbolPalabrasIgnoradas();
 
 		void escribirComentarioEnArchivo(string comentario, string categoria);
+
+		void desplegarPalabrasClave(){palabrasClave.desplegarArbol(palabrasClave.getRaiz());}
+		void desplegarCategorias(){categorias.desplegarArbol(categorias.getRaiz());}
+		void desplegarPalabrasIgnoradas(){palabrasIgnoradas.desplegarArbol(palabrasIgnoradas.getRaiz());}
 };
 
 // ============= Obtenido de usuario Evan Teran, Stack Overflow =================================//
@@ -125,12 +129,18 @@ void clasificador::llenarArbolPalabrasIgnoradas()
 
 void clasificador::clasificarPalabra(string palabra)
 {
-	NodoArbol<string, string> *palabraEncontrada = palabrasClave.encontrar(palabra);		
-	NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
+	if(!palabrasIgnoradas.existe(palabra)){
+		NodoArbol<string, string> *palabraEncontrada = palabrasClave.encontrar(palabra);		
+		NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
 
-	categoriaEncontrada->info2 += 1; 
+		categoriaEncontrada->info2 += 1; 
 
-	categoriaMayor = (categoriaMayor->info2 < categoriaEncontrada->info2) ? categoriaEncontrada:categoriaMayor;	
+		categoriaMayor = (categoriaMayor->info2 < categoriaEncontrada->info2) ? categoriaEncontrada:categoriaMayor;	
+	}else{
+		if (debug) {
+			cout<<"DEBUG::Esa palabra la ignoro: "<<palabra<<endl;
+		}
+	}
 }
 
 void clasificador::convertirAMinusculas(string &s)
@@ -189,9 +199,13 @@ void clasificador::clasificarArchivoDeComentarios()
 {	
 	ifstream archivoComentarios;
 	archivoComentarios.open(nom_ArchivoComentarios.c_str());
-
+	if (debug) {
+		cout<<"DEBUG::Abro el archivo con los comentarios."<<endl;
+	}
 	string linea, comentario = "";
-	while(getline(archivoComentarios, comentario)){
+	cin.ignore();
+	while(!archivoComentarios.eof()){
+		getline(archivoComentarios, linea);
 		if(linea == ""){
 			if (debug) {
 				cout<<"DEBUG::Salto de linea en el archivo."<<endl;
@@ -204,6 +218,11 @@ void clasificador::clasificarArchivoDeComentarios()
 			comentario += linea;
 		}
 	}
+	if (debug) {
+		cout<<"DEBUG::Ultimo comentario."<<endl;
+	}
+	clasificarComentario(comentario);
+	comentario = "";
 	archivoComentarios.close();
 }
 

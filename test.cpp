@@ -31,19 +31,53 @@ using namespace std;
 
 int main(int argc, const char *argv[])
 {
-	cout<<"Compila."<<endl;	
-	ArbolAVL<string, string> lista(true);
+	cout<<"Bienvenido al programa de clasificacion de comentarios."<<endl;	
+	string nArchComentarios, nArchPalabrasClave, nArchPalabrasIgnoradas, nArchSalida;  	
+
+	nArchComentarios = "pruebaComentarios.txt";
+	nArchPalabrasClave = "palabrasClave.txt";
+	nArchPalabrasIgnoradas = "palabrasIgnoradas.txt";
+	nArchSalida = "salidaEjemplo.txt";
+
+	// cout<<"Introduzca el nombre del archivo con los comentarios: "<<endl;
+	// cin>>nArchComentarios;
+
+	// cout<<"Introduzca el nombre del archivo con las palabras clave: "<<endl;
+	// cin>>nArchPalabrasClave;
+
+	// cout<<"Introduzca el nombre del archivo con las palabras a ignorar: "<<endl;
+	// cin>>nArchPalabrasIgnoradas;
+
+	// cout<<"Introduzca el nombre del archivo salida: "<<endl;
+	// cin>>nArchSalida;
+
+	clasificador bob(nArchComentarios, nArchPalabrasClave, nArchPalabrasIgnoradas, nArchSalida);
+	bob.llenarArbolPalabrasClave();
+	bob.llenarArbolPalabrasIgnoradas();	
 	
-	string entrada = "";	
-	string categoria = "prueba";
-	while(entrada!="0")
-	{
-		cin>>entrada;
-		if(entrada!="0"){
-			lista.insertar(entrada, categoria);
-		}
-	}
-	lista.desplegarArbol(lista.getRaiz());
+	cout<<"Estas son las palabras clave: "<<endl;
+	bob.desplegarPalabrasClave();
+	
+	cout<<"Estas son las categorias: "<<endl;
+	bob.desplegarCategorias();
+	
+	cout<<"Estas son las palabras ignoradas: "<<endl;
+	bob.desplegarPalabrasIgnoradas();
+	
+	bob.clasificarArchivoDeComentarios();
+
+	// ArbolAVL<string, string> lista(true);
+	// 
+	// string entrada = "";	
+	// string categoria = "prueba";
+	// while(entrada!="0")
+	// {
+	// 	cin>>entrada;
+	// 	if(entrada!="0"){
+	// 		lista.insertar(entrada, categoria);
+	// 	}
+	// }
+	// lista.desplegarArbol(lista.getRaiz());
 	return 0;
 }
 

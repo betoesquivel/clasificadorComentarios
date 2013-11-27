@@ -1,0 +1,16 @@
+biblioteca biblioteca
+instalaciones instalaciones
+computadoras instalaciones
+informatica informatica
+libros biblioteca
+venados instalaciones
+escaleras instalaciones
+cables informatica
+cargadores informatica
+jardines instalaciones
+cafeteria cafeteria
+comida cafeteria
+profesores facultad
+maestros facultad
+examenes DireccionAcademica
+parciales DireccionAcademica

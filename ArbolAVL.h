@@ -317,16 +317,27 @@ void ArbolAVL<T,V>::insertar (T valor, V categoria)
 	NodoArbol<T,V> *actual = raiz, *anterior = NULL, *pivote = NULL;
 	while (actual != NULL)
 	{
-		if (debug && anterior!=NULL) {
-			cout<<"DEBUG::El valor anterior es: "<<anterior->info<<endl;
-			cout<<"DEBUG::El valor anterior tiene un FB de: "<<anterior->FB<<endl;
-		}
+		// if (debug && anterior!=NULL) {
+		// 	cout<<"DEBUG::El valor anterior es: "<<anterior->info<<endl;
+		// 	cout<<"DEBUG::El valor anterior tiene un FB de: "<<anterior->FB<<endl;
+		// }
 		anterior=actual;
 		
 		if (valor < actual->info) {
 			actual->FB -= 1; 
 			if (actual->FB<-1) {
 				pivote = actual;
+			}else if (actual->FB==0 && actual->padre!=NULL) {
+				if (debug) {
+					cout<<"DEBUG::No ha aumentado un nivel."<<endl;
+				}
+
+				while(anterior!=raiz){
+					anterior = anterior->padre;
+					anterior->FB = calcularFB(anterior);
+				}
+				pivote = NULL;
+				anterior = actual;
 			}
 				
 			actual = actual->izq;
@@ -334,6 +345,17 @@ void ArbolAVL<T,V>::insertar (T valor, V categoria)
 			actual->FB += 1; 
 			if (actual->FB>1) {
 				pivote = actual;
+			}else if (actual->FB==0 && actual->padre!=NULL) {
+				if (debug) {
+					cout<<"DEBUG::No ha aumentado un nivel."<<endl;
+				}
+
+				while(anterior!=raiz){
+					anterior = anterior->padre;
+					anterior->FB = calcularFB(anterior);
+				}
+				pivote = NULL;
+				anterior = actual;
 			}
 
 			actual = actual->der;
@@ -359,6 +381,9 @@ void ArbolAVL<T,V>::insertar (T valor, V categoria)
 	if(pivote!=NULL){
 		balancear(pivote);
 	}
+	// if(debug){
+	// 	desplegarArbol(raiz);
+	// }
 }
 
 template <class T, class V>
