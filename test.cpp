@@ -19,6 +19,10 @@
 #include <iostream>
 #include <queue>
 #include <fstream>
+#include <algorithm>
+#include <cctype>
+#include <locale>
+#include <sstream>
 
 using namespace std;
 
@@ -28,8 +32,8 @@ using namespace std;
 int main(int argc, const char *argv[])
 {
 	cout<<"Compila."<<endl;	
-	ArbolAVL<string> lista(true);
-
+	ArbolAVL<string, string> lista(true);
+	
 	string entrada = "";	
 	string categoria = "prueba";
 	while(entrada!="0")
