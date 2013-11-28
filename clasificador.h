@@ -93,6 +93,7 @@ clasificador::clasificador(string nComentarios, string nPalabrasClave, string nP
 	nom_ArchivoPalabrasClave = nPalabrasClave;
 	nom_ArchivoPalabrasIgnoradas = nPalabrasIgnoradas;
 	nom_ArchivoSalida = nSalida;
+	categoriaMayor = NULL;
 
 	palabrasClave.setDebug(false);
 	palabrasIgnoradas.setDebug(false);
@@ -198,41 +199,27 @@ void clasificador::clasificarComentario(string comentario)
 	string palabra = ""; 
 	while(iss>>palabra){
 		clasificarPalabra(palabra);
-		cout<<"Termine de clsificar la palabra.."<<endl;
-		cout<<palabra<<'.'<<endl;
 	}
-	// unsigned int i = 0;
-	// while (i < temp.length()) {
-	// 	if (temp[i]==' ') {
-	// 		trim(palabra);
-	// 		// clasificarPalabra(palabra);
-	// 		cout<<palabra<<endl;
-	// 		palabra = "";
-	// 	}else{
-	// 		palabra+=temp[i];
-	// 	}
-	// 	
-	// 	i++;		
-	// }
-	cout<<"salgo del while"<<endl;
 
 	if(categoriaMayor == NULL){
-		cout<<"No pude clasificar ese comentario."<<endl;
 		categoria = "NA";
 	}else{
 		categoria = categoriaMayor->info;
 	}
-	// escribirComentarioEnArchivo(comentario,categoria);
+	escribirComentarioEnArchivo(comentario,categoria);
 
-	// if (debug) {
-	// 	cout<<"DEBUG::Categoria del comentario: "<<categoriaMayor->info<<endl;
-	// 	cout<<"---------DEBUG-----------"<<endl;
-	// 	cout<<comentario<<endl;
-	// 	cout<<"DEBUG::Comentario contaba con "<<categoriaMayor->info2<<" coincidencias"<<endl;
-	// }
+	if (debug && categoriaMayor != NULL) {
+		cout<<"DEBUG::Categoria del comentario: "<<categoriaMayor->info<<endl;
+		cout<<"---------DEBUG-----------"<<endl;
+		cout<<comentario<<endl;
+		cout<<"DEBUG::Comentario contaba con "<<categoriaMayor->info2<<" coincidencias"<<endl;
+	}
 
 	//bug 2
 	resetearContadorCategorias(categorias.getRaiz());
+	if (debug) {
+		cout<<"Termine de categorizar el comentario."<<endl;
+	}
 	categoriaMayor=NULL;
 }
 
@@ -258,8 +245,11 @@ void clasificador::clasificarArchivoDeComentarios()
 			comentario = "";
 		}else{
 			trim(linea);
-			comentario += "\n ";
 			comentario += linea;
+			comentario += "\n";
+		}
+		if (debug) {
+			cout<<"Fin de comentario del ciclo."<<endl;
 		}
 	}
 	if (debug) {
@@ -273,19 +263,20 @@ void clasificador::clasificarArchivoDeComentarios()
 //bug 1
 void clasificador::escribirComentarioEnArchivo(string comentario, string categoria)
 {
-	if(debug)
-		cout<<"escribiendo el comentario"<<endl;
+	if(debug) {
+		cout<<"DEBUG::escribiendo el comentario"<<endl;
+		cout<<"DEBUG::con categoria: "<<categoria<<endl;
+	}
 	ofstream archivoSalida;
-	archivoSalida.open(nom_ArchivoSalida.c_str());
-	if(debug)
-		cout<<"abro el archivo"<<endl;
-	if(debug)
-		cout<<"imprimo la categoria en el archivo rodeada de llaves"<<endl;
+	archivoSalida.open(nom_ArchivoSalida.c_str(),ios::app);
 	archivoSalida<<"<"<<categoria<<">"<<endl;
-	archivoSalida<<comentario<<endl;
+	archivoSalida<<comentario;
+	archivoSalida<<"<"<<categoria<<">"<<endl;
 	archivoSalida<<endl;
 
 	archivoSalida.close();
+	if(debug)
+		cout<<"termino de editar el archivo"<<endl;
 }
 
 

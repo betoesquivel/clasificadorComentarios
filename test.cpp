@@ -50,7 +50,7 @@ int main(int argc, const char *argv[])
 
 	// cout<<"Introduzca el nombre del archivo salida: "<<endl;
 	// cin>>nArchSalida;
-
+	//
 	clasificador bob(nArchComentarios, nArchPalabrasClave, nArchPalabrasIgnoradas, nArchSalida);
 	bob.llenarArbolPalabrasClave();
 	bob.llenarArbolPalabrasIgnoradas();	
