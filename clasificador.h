@@ -179,14 +179,17 @@ void clasificador::quitarSignosDePuntuacion(string &s)
 
 void clasificador::resetearContadorCategorias(NodoArbol<string,int>* inicial)
 {
-	inicial->info2 = 0;	
-	resetearContadorCategorias(inicial->izq);	
-	resetearContadorCategorias(inicial->der);
+	if(inicial!=NULL){
+		inicial->info2 = 0;	
+		resetearContadorCategorias(inicial->izq);	
+		resetearContadorCategorias(inicial->der);
+	}
 }
 
 void clasificador::clasificarComentario(string comentario)
 {	
 	string temp = comentario;
+	string categoria;
 	trim(temp);
 	quitarSignosDePuntuacion(temp);
 	convertirAMinusculas(temp);
@@ -215,9 +218,11 @@ void clasificador::clasificarComentario(string comentario)
 
 	if(categoriaMayor == NULL){
 		cout<<"No pude clasificar ese comentario."<<endl;
+		categoria = "NA";
 	}else{
-		// escribirComentarioEnArchivo(comentario,categoriaMayor->info);
+		categoria = categoriaMayor->info;
 	}
+	// escribirComentarioEnArchivo(comentario,categoria);
 
 	// if (debug) {
 	// 	cout<<"DEBUG::Categoria del comentario: "<<categoriaMayor->info<<endl;
@@ -227,7 +232,7 @@ void clasificador::clasificarComentario(string comentario)
 	// }
 
 	//bug 2
-	// resetearContadorCategorias(categorias.getRaiz());
+	resetearContadorCategorias(categorias.getRaiz());
 	categoriaMayor=NULL;
 }
 
@@ -271,9 +276,9 @@ void clasificador::escribirComentarioEnArchivo(string comentario, string categor
 	if(debug)
 		cout<<"escribiendo el comentario"<<endl;
 	ofstream archivoSalida;
+	archivoSalida.open(nom_ArchivoSalida.c_str());
 	if(debug)
 		cout<<"abro el archivo"<<endl;
-	archivoSalida.open(nom_ArchivoSalida.c_str());
 	if(debug)
 		cout<<"imprimo la categoria en el archivo rodeada de llaves"<<endl;
 	archivoSalida<<"<"<<categoria<<">"<<endl;
