@@ -404,7 +404,6 @@ NodoArbol<T,V>* ArbolAVL<T,V>::encontrar (T dato)
 	if (aux!=NULL) {
 		return aux;
 	}else{
-		cout<<"No se ha encontrado esa categoria, mate"<<endl;
 		return aux;
 	}
 }

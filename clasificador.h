@@ -28,7 +28,7 @@
 //
 // Para partir un string en palabras
 // #include <stringstream>
-bool debug = true;
+bool debug = false;
 class clasificador{
 	private: 
 		ArbolAVL<string, string> palabrasClave;

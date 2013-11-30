@@ -50,7 +50,7 @@ int main(int argc, const char *argv[])
 
 	// cout<<"Introduzca el nombre del archivo salida: "<<endl;
 	// cin>>nArchSalida;
-	//
+	
 	clasificador bob(nArchComentarios, nArchPalabrasClave, nArchPalabrasIgnoradas, nArchSalida);
 	bob.llenarArbolPalabrasClave();
 	bob.llenarArbolPalabrasIgnoradas();	
@@ -69,18 +69,6 @@ int main(int argc, const char *argv[])
 	cout<<"========================================================================"<<endl;
 	cout<<"Gracias por utilizar la aplicación. Se ha generado el archivo de salida: "<<nArchSalida<<endl;
 
-	// ArbolAVL<string, string> lista(true);
-	// 
-	// string entrada = "";	
-	// string categoria = "prueba";
-	// while(entrada!="0")
-	// {
-	// 	cin>>entrada;
-	// 	if(entrada!="0"){
-	// 		lista.insertar(entrada, categoria);
-	// 	}
-	// }
-	// lista.desplegarArbol(lista.getRaiz());
 	return 0;
 }
 
