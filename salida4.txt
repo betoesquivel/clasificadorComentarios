@@ -56,6 +56,3 @@ y ponen hasta 4 parciales!!!!!!
 Me parece que el servicio de cafeteria es demasiado caro. Y la comida ni sabe bien.
 <cafeteria>
 
-<NA>
-<NA>
-

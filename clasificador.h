@@ -44,7 +44,8 @@ class clasificador{
 		NodoArbol<string, int>* categoriaMayor;
 
 	public:
-		clasificador(string nComentarios, string nPalabrasClave, string nPalabrasIgnoradas, string nSalida);
+		clasificador(string nComentarios, string nPalabrasClave, 
+			     string nPalabrasIgnoradas, string nSalida);
 
 		void convertirAMinusculas(string &s);
 		void quitarSignosDePuntuacion(string &s);
@@ -59,9 +60,15 @@ class clasificador{
 
 		void escribirComentarioEnArchivo(string comentario, string categoria);
 
-		void desplegarPalabrasClave(){palabrasClave.desplegarArbol(palabrasClave.getRaiz());}
-		void desplegarCategorias(){categorias.desplegarArbol(categorias.getRaiz());}
-		void desplegarPalabrasIgnoradas(){palabrasIgnoradas.desplegarArbol(palabrasIgnoradas.getRaiz());}
+		void desplegarPalabrasClave(){
+			palabrasClave.desplegarArbol(palabrasClave.getRaiz());
+		}
+		void desplegarCategorias(){
+			categorias.desplegarArbol(categorias.getRaiz());
+		}
+		void desplegarPalabrasIgnoradas(){
+			palabrasIgnoradas.desplegarArbol(palabrasIgnoradas.getRaiz());
+		}
 };
 
 // ============= Obtenido de usuario Evan Teran, Stack Overflow =================================//
@@ -86,9 +93,11 @@ static inline string &trim(std::string &s) {
 // http://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 // ============= Fin de reuso de codigo de Evan Teran ========================================//
 
-clasificador::clasificador(string nComentarios, string nPalabrasClave, string nPalabrasIgnoradas, string nSalida)
+clasificador::clasificador(string nComentarios, string nPalabrasClave, 
+			   string nPalabrasIgnoradas, string nSalida)
 {
-	//Al inicializar con este constructor el clasificador, el arbol de categorias se creara conforme se leen las palabras clave.
+	//Al inicializar con este constructor el clasificador,
+	//el arbol de categorias se creara conforme se leen las palabras clave.
 	nom_ArchivoComentarios = nComentarios;
 	nom_ArchivoPalabrasClave = nPalabrasClave;
 	nom_ArchivoPalabrasIgnoradas = nPalabrasIgnoradas;
@@ -120,7 +129,8 @@ void clasificador::llenarArbolPalabrasIgnoradas()
 	ifstream archivoPalabrasIgnoradas;
 	archivoPalabrasIgnoradas.open(nom_ArchivoPalabrasIgnoradas.c_str());
 	string palabra;
-	int dato2 = 0;//Solamente es el segundo dato en el arbol. Por ahora es inutil. Puede usarse para futuras optimizaciones.
+	int dato2 = 0;//Solamente es el segundo dato en el arbol. 
+	//Por ahora es inutil. Puede usarse para futuras optimizaciones.
 	while(archivoPalabrasIgnoradas>>palabra)
 	{
 		palabrasIgnoradas.insertar(palabra,dato2);
@@ -144,7 +154,9 @@ void clasificador::clasificarPalabra(string palabra)
 			categoriaEncontrada->info2 += 1; 
 
 			if(categoriaMayor!=NULL){
-				categoriaMayor = (categoriaMayor->info2 < categoriaEncontrada->info2) ? categoriaEncontrada:categoriaMayor;	
+				if (categoriaMayor->info2 < categoriaEncontrada->info2) {
+					categoriaMayor = categoriaEncontrada; 
+				}
 			}else{
 				categoriaMayor = categoriaEncontrada;
 			}
@@ -212,14 +224,11 @@ void clasificador::clasificarComentario(string comentario)
 		cout<<"DEBUG::Categoria del comentario: "<<categoriaMayor->info<<endl;
 		cout<<"---------DEBUG-----------"<<endl;
 		cout<<comentario<<endl;
-		cout<<"DEBUG::Comentario contaba con "<<categoriaMayor->info2<<" coincidencias"<<endl;
+		cout<<"DEBUG::Comentario contaba con "<<categoriaMayor->info2
+		<<" coincidencias"<<endl;
 	}
 
-	//bug 2
 	resetearContadorCategorias(categorias.getRaiz());
-	if (debug) {
-		cout<<"Termine de categorizar el comentario."<<endl;
-	}
 	categoriaMayor=NULL;
 }
 
@@ -234,10 +243,7 @@ void clasificador::clasificarArchivoDeComentarios()
 	string linea, comentario = "";
 	while(!archivoComentarios.eof()){
 		getline(archivoComentarios, linea);
-		if(debug) {
-			cout<<"Linea: "<<linea<<endl;
-		}
-		if(linea == ""){
+		if(linea == "" && comentario != ""){
 			if (debug) {
 				cout<<"DEBUG::Salto de linea en el archivo."<<endl;
 			}
@@ -255,12 +261,13 @@ void clasificador::clasificarArchivoDeComentarios()
 	if (debug) {
 		cout<<"DEBUG::Ultimo comentario."<<endl;
 	}
-	clasificarComentario(comentario);
+	if (comentario != "") {
+		clasificarComentario(comentario);
+	}
 	comentario = "";
 	archivoComentarios.close();
 }
 
-//bug 1
 void clasificador::escribirComentarioEnArchivo(string comentario, string categoria)
 {
 	if(debug) {
@@ -275,8 +282,6 @@ void clasificador::escribirComentarioEnArchivo(string comentario, string categor
 	archivoSalida<<endl;
 
 	archivoSalida.close();
-	if(debug)
-		cout<<"termino de editar el archivo"<<endl;
 }
 
 
