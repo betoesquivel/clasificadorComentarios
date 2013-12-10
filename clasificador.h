@@ -274,11 +274,12 @@ void clasificador::escribirComentarioEnArchivo(string comentario, string categor
 		cout<<"DEBUG::escribiendo el comentario"<<endl;
 		cout<<"DEBUG::con categoria: "<<categoria<<endl;
 	}
+	categoria += ".txt";
 	ofstream archivoSalida;
-	archivoSalida.open(nom_ArchivoSalida.c_str(),ios::app);
-	archivoSalida<<"<"<<categoria<<">"<<endl;
+	archivoSalida.open(categoria.c_str(),ios::app);
+	// archivoSalida<<"<"<<categoria<<">"<<endl;
 	archivoSalida<<comentario;
-	archivoSalida<<"<"<<categoria<<">"<<endl;
+	// archivoSalida<<"<"<<categoria<<">"<<endl;
 	archivoSalida<<endl;
 
 	archivoSalida.close();
