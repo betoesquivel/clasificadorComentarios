@@ -51,6 +51,7 @@ class clasificador{
 		void quitarSignosDePuntuacion(string &s);
 		void resetearContadorCategorias(NodoArbol<string,int>* inicial);
 
+		void modificarCategoriasEncontradasDePalabra(NodoArbol<string,string> *palabraEncontrada);
 		void clasificarPalabra(string palabra);
 		void clasificarComentario(string comentario);
 		void clasificarArchivoDeComentarios();
@@ -114,11 +115,16 @@ void clasificador::llenarArbolPalabrasClave()
 	ifstream archivoPalabrasClave;
 	archivoPalabrasClave.open(nom_ArchivoPalabrasClave.c_str());
 	string palabra, categoria;
-	while(archivoPalabrasClave>>palabra>>categoria)
+	string linea;
+	while(getline(archivoPalabrasClave, linea))
 	{
-		palabrasClave.insertar(palabra,categoria);
-		if(!categorias.existe(categoria)){
-			categorias.insertar(categoria,0);
+		istringstream iss(linea);
+		iss>>palabra;
+		while(iss>>categoria){
+			palabrasClave.insertar(palabra,categoria);
+			if(!categorias.existe(categoria)){
+				categorias.insertar(categoria,0);
+			}
 		}
 	}
 	archivoPalabrasClave.close();	
@@ -138,6 +144,34 @@ void clasificador::llenarArbolPalabrasIgnoradas()
 	archivoPalabrasIgnoradas.close();	
 }
 
+void clasificador::modificarCategoriasEncontradasDePalabra(NodoArbol<string,string> *palabraEncontrada)
+{
+	NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
+	categoriaEncontrada->info2 += 1; 
+	cout<<"categoria encontrada: "<<categoriaEncontrada->info<<endl;
+	
+
+	if(categoriaMayor!=NULL){
+		if (categoriaMayor->info2 < categoriaEncontrada->info2) {
+			categoriaMayor = categoriaEncontrada; 
+		}
+	}else{
+		categoriaMayor = categoriaEncontrada;
+	}
+
+	if (palabraEncontrada->izq!=NULL) {
+		if(palabraEncontrada->izq->info == palabraEncontrada->info){
+			cout<<"La palabra se repite en el arbol."<<endl;
+			modificarCategoriasEncontradasDePalabra(palabraEncontrada->izq);
+		}	
+	}
+	if (palabraEncontrada->der!=NULL) {
+		if(palabraEncontrada->der->info == palabraEncontrada->info){
+			cout<<"La palabra se repite en el arbol."<<endl;
+			modificarCategoriasEncontradasDePalabra(palabraEncontrada->der);
+		}	
+	}
+}
 void clasificador::clasificarPalabra(string palabra)
 {
 	if (debug) {
@@ -150,16 +184,19 @@ void clasificador::clasificarPalabra(string palabra)
 			if (debug) {
 				cout<<"Palabra encontrada en claves: "<<palabraEncontrada->info<<endl;
 			}
-			NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
-			categoriaEncontrada->info2 += 1; 
+			modificarCategoriasEncontradasDePalabra(palabraEncontrada);
+			//tengo que hacer esto para todas las categorias de la palabra
+			// NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
+			// categoriaEncontrada->info2 += 1; 
 
-			if(categoriaMayor!=NULL){
-				if (categoriaMayor->info2 < categoriaEncontrada->info2) {
-					categoriaMayor = categoriaEncontrada; 
-				}
-			}else{
-				categoriaMayor = categoriaEncontrada;
-			}
+			// if(categoriaMayor!=NULL){
+			// 	if (categoriaMayor->info2 < categoriaEncontrada->info2) {
+			// 		categoriaMayor = categoriaEncontrada; 
+			// 	}
+			// }else{
+			// 	categoriaMayor = categoriaEncontrada;
+			// }
+			//esto iria dentro del while
 		}		
 
 	}else{

@@ -10,12 +10,11 @@ cargadores informatica
 jardines instalaciones
 cafeteria cafeteria
 comida cafeteria
-profesores facultad
 maestros facultad
-examenes DireccionAcademica
+examenes DireccionAcademica facultad
 parciales DireccionAcademica
-califican DireccionAcademica
-califican facultad
+califican DireccionAcademica facultad
+profesores facultad
 sillas mobiliario
 sillitas mobiliario
 bancos mobiliario
@@ -36,3 +35,4 @@ inscribirnos inscripciones
 interfaz informatica
 pagina informatica
 web informatica
+internet informatica
