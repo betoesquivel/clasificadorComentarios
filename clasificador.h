@@ -28,7 +28,7 @@
 //
 // Para partir un string en palabras
 // #include <stringstream>
-bool debug = false;
+bool debug = true;
 class clasificador{
 	private: 
 		ArbolAVL<string, string> palabrasClave;
@@ -148,7 +148,9 @@ void clasificador::modificarCategoriasEncontradasDePalabra(NodoArbol<string,stri
 {
 	NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
 	categoriaEncontrada->info2 += 1; 
-	cout<<"categoria encontrada: "<<categoriaEncontrada->info<<endl;
+	if (debug) {
+		cout<<"categoria encontrada: "<<categoriaEncontrada->info<<endl;
+	}
 	
 
 	if(categoriaMayor!=NULL){
@@ -159,17 +161,13 @@ void clasificador::modificarCategoriasEncontradasDePalabra(NodoArbol<string,stri
 		categoriaMayor = categoriaEncontrada;
 	}
 
-	if (palabraEncontrada->izq!=NULL) {
-		if(palabraEncontrada->izq->info == palabraEncontrada->info){
-			cout<<"La palabra se repite en el arbol."<<endl;
-			modificarCategoriasEncontradasDePalabra(palabraEncontrada->izq);
-		}	
-	}
-	if (palabraEncontrada->der!=NULL) {
-		if(palabraEncontrada->der->info == palabraEncontrada->info){
-			cout<<"La palabra se repite en el arbol."<<endl;
-			modificarCategoriasEncontradasDePalabra(palabraEncontrada->der);
-		}	
+	NodoArbol<string, string> *palabraRepetida = palabrasClave.encontrar(palabraEncontrada);
+	if (palabraRepetida!=NULL) {
+		if (debug) {
+			cout<<"Arriba tiene la palabra: "<<palabraRepetida->info<<endl;
+			cout<<"Con categoria: "<<palabraRepetida->info2<<endl;
+		}
+		modificarCategoriasEncontradasDePalabra(palabraRepetida);
 	}
 }
 void clasificador::clasificarPalabra(string palabra)

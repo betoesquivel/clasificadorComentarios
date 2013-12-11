@@ -47,6 +47,7 @@ public:
 		void insertar (T dato, V categoria);
 		bool existe (T dato);
 		NodoArbol<T,V>* encontrar (T dato);
+		NodoArbol<T,V>* encontrar (NodoArbol<T,V>* inicial);
 		int obtenerAltura(NodoArbol<T,V> *inicial);
 		int contarComparaciones(NodoArbol<T,V> *inicial, int comparaciones);
 		void desplegarArbol(NodoArbol<T,V> *inicial);
@@ -312,7 +313,7 @@ void libera (NodoArbol<T,V>* raiz)
 
 template <class T, class V>
 void ArbolAVL<T,V>::insertar (T valor, V categoria)
-{ //Precondición: el valor no existe en el árbol.
+{ 
 	NodoArbol<T,V> *NuevoNodo = new NodoArbol<T,V>(valor, categoria);
 	NodoArbol<T,V> *actual = raiz, *anterior = NULL, *pivote = NULL;
 	while (actual != NULL)
@@ -401,11 +402,17 @@ NodoArbol<T,V>* ArbolAVL<T,V>::encontrar (T dato)
 	NodoArbol<T,V> *aux = raiz;
 	while (aux != NULL && aux->info != dato)
 		aux = (dato < aux->info? aux->izq : aux->der);
-	if (aux!=NULL) {
-		return aux;
-	}else{
-		return aux;
-	}
+	return aux;
+}
+
+template <class T, class V>
+NodoArbol<T,V>* ArbolAVL<T,V>::encontrar (NodoArbol<T,V> *inicial)
+{
+	//para buscar datos iguales ( que siempre quedan en el subarbol derecho ) 
+	NodoArbol<T,V> *aux = inicial->der;
+	while (aux != NULL && aux->info != inicial->info)
+		aux = (inicial->info < aux->info? aux->izq : aux->der);
+	return aux;
 }
 
 template <class T, class V>
