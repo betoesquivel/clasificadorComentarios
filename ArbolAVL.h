@@ -1,7 +1,7 @@
 
 // #include <iostream>
 // #include <queue>
-// 
+//
 // using namespace std;
 
 template <class T, class V>
@@ -28,12 +28,12 @@ public:
 		ArbolAVL() { raiz = NULL; this->debug = false;}
 		ArbolAVL(bool debug) { raiz = NULL; this->debug = debug;}
 		NodoArbol<T,V>* getRaiz(){return raiz;}
-		
-		void setDebug(bool d) { debug = d; } 
+
+		void setDebug(bool d) { debug = d; }
 
 		//Balanceo AVL
 		void balancear(NodoArbol<T,V> *pivote);
-		
+
 		NodoArbol<T,V>* rotacionSimpleIzquierda(NodoArbol<T,V> *pivote);
 		NodoArbol<T,V>* rotacionSimpleDerecha(NodoArbol<T,V> *pivote);
 
@@ -77,12 +77,12 @@ void ArbolAVL<T,V>::balancear(NodoArbol<T,V> *pivote)
 		}
 	}
 	//calculo el FB de todos los padres
-	NodoArbol<T,V> *aux = pivote; 
+	NodoArbol<T,V> *aux = pivote;
 	while(aux!=raiz)
 	{
 		aux = aux->padre;
 		aux->FB = calcularFB(aux);
-	}	
+	}
 	while(pivote!=raiz)
 	{
 		pivote = pivote->padre;
@@ -103,25 +103,25 @@ NodoArbol<T,V>* ArbolAVL<T,V>::rotacionSimpleIzquierda(NodoArbol<T,V> *pivote)
 	B = pivote;
 
 	B->der = A->izq;
-	A->izq = B; 
+	A->izq = B;
 
 	if(B->der != NULL){
-		(B->der)->padre = B; 
+		(B->der)->padre = B;
 	}
 	A->padre = B->padre;
-	B->padre = A; 
+	B->padre = A;
 
 	if(A->padre != NULL)
 	{
 		if (A->info < (A->padre)->info) {
 			(A->padre)->izq = A;
 		}else{
-			(A->padre)->der = A; 
+			(A->padre)->der = A;
 		}
 	}
 	else
 	{
-		raiz = A; 
+		raiz = A;
 	}
 
 	A->FB = B->FB = 0;
@@ -142,25 +142,25 @@ NodoArbol<T,V>* ArbolAVL<T,V>::rotacionSimpleDerecha(NodoArbol<T,V> *pivote)
 	B = pivote;
 
 	B->izq = A->der;
-	A->der = B; 
+	A->der = B;
 
 	if(B->izq != NULL){
-		(B->izq)->padre = B; 
+		(B->izq)->padre = B;
 	}
 	A->padre = B->padre;
-	B->padre = A; 
+	B->padre = A;
 
 	if(A->padre != NULL)
 	{
 		if (A->info < (A->padre)->info) {
 			(A->padre)->izq = A;
 		}else{
-			(A->padre)->der = A; 
+			(A->padre)->der = A;
 		}
 	}
 	else
 	{
-		raiz = A; 
+		raiz = A;
 	}
 
 	A->FB = B->FB = 0;
@@ -190,13 +190,13 @@ NodoArbol<T,V>* ArbolAVL<T,V>::rotacionDobleIzquierda(NodoArbol<T,V> *pivote)
 	B->der = aux;
 
 	if(B->der != NULL){
-		(B->der)->padre = B; 
+		(B->der)->padre = B;
 	}
 	if(A->izq != NULL){
-		(A->izq)->padre = A; 
+		(A->izq)->padre = A;
 	}
 
-	A->padre = C; 
+	A->padre = C;
 	C->padre = B->padre;
 	B->padre = C;
 	if(C->padre != NULL)
@@ -205,13 +205,13 @@ NodoArbol<T,V>* ArbolAVL<T,V>::rotacionDobleIzquierda(NodoArbol<T,V> *pivote)
 		if (C->info < (C->padre)->info) {
 			(C->padre)->izq = C;
 		}else{
-			(C->padre)->der = C; 
+			(C->padre)->der = C;
 		}
 	}
 	else
 	{
 		if(debug){cout<<"C es la raiz: "<<endl;}
-		raiz = C; 
+		raiz = C;
 	}
 
 	C->FB = 0;
@@ -243,13 +243,13 @@ NodoArbol<T,V>* ArbolAVL<T,V>::rotacionDobleDerecha(NodoArbol<T,V> *pivote)
 	B->der = aux;
 
 	if(B->der != NULL){
-		(B->der)->padre = B; 
+		(B->der)->padre = B;
 	}
 	if(A->izq != NULL){
-		(A->izq)->padre = A; 
+		(A->izq)->padre = A;
 	}
 
-	B->padre = C; 
+	B->padre = C;
 	C->padre = A->padre;
 	A->padre = C;
 	if(C->padre != NULL)
@@ -257,12 +257,12 @@ NodoArbol<T,V>* ArbolAVL<T,V>::rotacionDobleDerecha(NodoArbol<T,V> *pivote)
 		if (C->info < (C->padre)->info) {
 			(C->padre)->izq = C;
 		}else{
-			(C->padre)->der = C; 
+			(C->padre)->der = C;
 		}
 	}
 	else
 	{
-		raiz = C; 
+		raiz = C;
 	}
 
 	C->FB = 0;
@@ -285,7 +285,7 @@ int ArbolAVL<T,V>::calcularFB(NodoArbol<T,V> *inicial)
 	}
 	return ( factorBalance  );
 }
-	
+
 template <class T, class V>
 bool ArbolAVL<T,V>::balanceado(NodoArbol<T,V> *inicial)
 {
@@ -302,7 +302,7 @@ bool ArbolAVL<T,V>::balanceado(NodoArbol<T,V> *inicial)
 }
 
 template <class T, class V>
-void libera (NodoArbol<T,V>* raiz) 
+void libera (NodoArbol<T,V>* raiz)
 { //Observar que al ser recursive, es una función libre llamada por el método
 	if (raiz != NULL)
 	{ 	libera(raiz->izq);
@@ -313,7 +313,7 @@ void libera (NodoArbol<T,V>* raiz)
 
 template <class T, class V>
 void ArbolAVL<T,V>::insertar (T valor, V categoria)
-{ 
+{
 	NodoArbol<T,V> *NuevoNodo = new NodoArbol<T,V>(valor, categoria);
 	NodoArbol<T,V> *actual = raiz, *anterior = NULL, *pivote = NULL;
 	while (actual != NULL)
@@ -323,9 +323,9 @@ void ArbolAVL<T,V>::insertar (T valor, V categoria)
 		// 	cout<<"DEBUG::El valor anterior tiene un FB de: "<<anterior->FB<<endl;
 		// }
 		anterior=actual;
-		
+
 		if (valor < actual->info) {
-			actual->FB -= 1; 
+			actual->FB -= 1;
 			if (actual->FB<-1) {
 				pivote = actual;
 			}else if (actual->FB==0 && actual->padre!=NULL) {
@@ -340,10 +340,10 @@ void ArbolAVL<T,V>::insertar (T valor, V categoria)
 				pivote = NULL;
 				anterior = actual;
 			}
-				
+
 			actual = actual->izq;
 		}else{
-			actual->FB += 1; 
+			actual->FB += 1;
 			if (actual->FB>1) {
 				pivote = actual;
 			}else if (actual->FB==0 && actual->padre!=NULL) {
@@ -363,17 +363,17 @@ void ArbolAVL<T,V>::insertar (T valor, V categoria)
 		}
 	}
 
-	if (anterior==NULL)	
+	if (anterior==NULL)
 	{
 		raiz = NuevoNodo;
 	}
 	else
 	{
-		if (valor < anterior->info) 
+		if (valor < anterior->info)
 		{
 			anterior->izq = NuevoNodo;
 		}
-		else 
+		else
 		{
 			anterior->der = NuevoNodo;
 		}
@@ -408,7 +408,7 @@ NodoArbol<T,V>* ArbolAVL<T,V>::encontrar (T dato)
 template <class T, class V>
 NodoArbol<T,V>* ArbolAVL<T,V>::encontrar (NodoArbol<T,V> *inicial)
 {
-	//para buscar datos iguales ( que siempre quedan en el subarbol derecho ) 
+	//para buscar datos iguales ( que siempre quedan en el subarbol derecho )
 	NodoArbol<T,V> *aux = inicial->der;
 	while (aux != NULL && aux->info != inicial->info)
 		aux = (inicial->info < aux->info? aux->izq : aux->der);
@@ -436,7 +436,7 @@ int ArbolAVL<T,V>::contarComparaciones (NodoArbol<T,V>* raiz, int comparaciones)
 {
 	if (raiz != NULL) {
 		return (
-			 comparaciones 
+			 comparaciones
 			 + contarComparaciones(raiz->izq, comparaciones+1)
 			 + contarComparaciones(raiz->der, comparaciones+1)
 		);

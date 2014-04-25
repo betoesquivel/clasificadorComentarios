@@ -1,17 +1,17 @@
 // Descripcion: Clasifica comentarios dentro de una de las distintas categorias
-// basándose en las listas de palabras clave que identifican cada categoría. 
-// Guardo las palabras en un árbol de búsqueda binario conforme van apareciendo, 
+// basándose en las listas de palabras clave que identifican cada categoría.
+// Guardo las palabras en un árbol de búsqueda binario conforme van apareciendo,
 // dependiendo de la cantidad de veces que aparece la palabra, es la prioridad
 // que tiene en el árbol. Tal vez pueda utilizar mejor una priorityqueue para
 // las palabras.
-// 
+//
 // A partir de un archivo de entrada, genero un archivo de salida (especificado por el usuario)
 // que tiene los comentarios clasificados.
 //
 //pendiente...
-// Voy guardando los comentarios clasificados en dos listas 
+// Voy guardando los comentarios clasificados en dos listas
 // de strings paralelos. Uno contiene el comentario y otro contiene
-// la categoria. 
+// la categoria.
 //
 // Autor: José Alberto Esquivel Patino A01139626
 // Carrera: BCT
@@ -28,9 +28,9 @@
 //
 // Para partir un string en palabras
 // #include <stringstream>
-bool debug = true;
+bool debug = false;
 class clasificador{
-	private: 
+	private:
 		ArbolAVL<string, string> palabrasClave;
 		ArbolAVL<string, int> palabrasIgnoradas;
 		ArbolAVL<string, int> categorias;
@@ -39,12 +39,12 @@ class clasificador{
 		string nom_ArchivoPalabrasClave;
 		string nom_ArchivoPalabrasIgnoradas;
 
-		string nom_ArchivoSalida; 
+		string nom_ArchivoSalida;
 
 		NodoArbol<string, int>* categoriaMayor;
 
 	public:
-		clasificador(string nComentarios, string nPalabrasClave, 
+		clasificador(string nComentarios, string nPalabrasClave,
 			     string nPalabrasIgnoradas, string nSalida);
 
 		void convertirAMinusculas(string &s);
@@ -94,7 +94,7 @@ static inline string &trim(std::string &s) {
 // http://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 // ============= Fin de reuso de codigo de Evan Teran ========================================//
 
-clasificador::clasificador(string nComentarios, string nPalabrasClave, 
+clasificador::clasificador(string nComentarios, string nPalabrasClave,
 			   string nPalabrasIgnoradas, string nSalida)
 {
 	//Al inicializar con este constructor el clasificador,
@@ -127,7 +127,7 @@ void clasificador::llenarArbolPalabrasClave()
 			}
 		}
 	}
-	archivoPalabrasClave.close();	
+	archivoPalabrasClave.close();
 }
 
 void clasificador::llenarArbolPalabrasIgnoradas()
@@ -135,27 +135,27 @@ void clasificador::llenarArbolPalabrasIgnoradas()
 	ifstream archivoPalabrasIgnoradas;
 	archivoPalabrasIgnoradas.open(nom_ArchivoPalabrasIgnoradas.c_str());
 	string palabra;
-	int dato2 = 0;//Solamente es el segundo dato en el arbol. 
+	int dato2 = 0;//Solamente es el segundo dato en el arbol.
 	//Por ahora es inutil. Puede usarse para futuras optimizaciones.
 	while(archivoPalabrasIgnoradas>>palabra)
 	{
 		palabrasIgnoradas.insertar(palabra,dato2);
 	}
-	archivoPalabrasIgnoradas.close();	
+	archivoPalabrasIgnoradas.close();
 }
 
 void clasificador::modificarCategoriasEncontradasDePalabra(NodoArbol<string,string> *palabraEncontrada)
 {
-	NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
-	categoriaEncontrada->info2 += 1; 
+	NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);
+	categoriaEncontrada->info2 += 1;
 	if (debug) {
 		cout<<"categoria encontrada: "<<categoriaEncontrada->info<<endl;
 	}
-	
+
 
 	if(categoriaMayor!=NULL){
 		if (categoriaMayor->info2 < categoriaEncontrada->info2) {
-			categoriaMayor = categoriaEncontrada; 
+			categoriaMayor = categoriaEncontrada;
 		}
 	}else{
 		categoriaMayor = categoriaEncontrada;
@@ -177,25 +177,25 @@ void clasificador::clasificarPalabra(string palabra)
 		cout<<palabra<<endl;
 	}
 	if(!palabrasIgnoradas.existe(palabra)){
-		NodoArbol<string, string> *palabraEncontrada = palabrasClave.encontrar(palabra);		
+		NodoArbol<string, string> *palabraEncontrada = palabrasClave.encontrar(palabra);
 		if (palabraEncontrada!=NULL) {
 			if (debug) {
 				cout<<"Palabra encontrada en claves: "<<palabraEncontrada->info<<endl;
 			}
 			modificarCategoriasEncontradasDePalabra(palabraEncontrada);
 			//tengo que hacer esto para todas las categorias de la palabra
-			// NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);		
-			// categoriaEncontrada->info2 += 1; 
+			// NodoArbol<string, int> *categoriaEncontrada = categorias.encontrar(palabraEncontrada->info2);
+			// categoriaEncontrada->info2 += 1;
 
 			// if(categoriaMayor!=NULL){
 			// 	if (categoriaMayor->info2 < categoriaEncontrada->info2) {
-			// 		categoriaMayor = categoriaEncontrada; 
+			// 		categoriaMayor = categoriaEncontrada;
 			// 	}
 			// }else{
 			// 	categoriaMayor = categoriaEncontrada;
 			// }
 			//esto iria dentro del while
-		}		
+		}
 
 	}else{
 		if (debug) {
@@ -210,17 +210,17 @@ void clasificador::convertirAMinusculas(string &s)
 }
 
 void clasificador::quitarSignosDePuntuacion(string &s)
-{	
+{
 	string c;
 	for (unsigned int i = 0; i < s.length(); i++) {
 		c = s[i];
 		if (
 			c=="."||c==","||c=="?"||c=="!"||c=="¿"||c=="¡"||c==";"||
 		  	c=="-"||c=="+"||c=="_"||c=="*"||c=="&"||c=="'"
-		   ) 
+		   )
 		{
 			c = " ";
-			s[i] = c.c_str()[0]; 
+			s[i] = c.c_str()[0];
 		}
 	}
 }
@@ -228,14 +228,14 @@ void clasificador::quitarSignosDePuntuacion(string &s)
 void clasificador::resetearContadorCategorias(NodoArbol<string,int>* inicial)
 {
 	if(inicial!=NULL){
-		inicial->info2 = 0;	
-		resetearContadorCategorias(inicial->izq);	
+		inicial->info2 = 0;
+		resetearContadorCategorias(inicial->izq);
 		resetearContadorCategorias(inicial->der);
 	}
 }
 
 void clasificador::clasificarComentario(string comentario)
-{	
+{
 	string temp = comentario;
 	string categoria;
 	trim(temp);
@@ -243,7 +243,7 @@ void clasificador::clasificarComentario(string comentario)
 	convertirAMinusculas(temp);
 
 	istringstream iss(temp);
-	string palabra = ""; 
+	string palabra = "";
 	while(iss>>palabra){
 		clasificarPalabra(palabra);
 	}
@@ -268,7 +268,7 @@ void clasificador::clasificarComentario(string comentario)
 }
 
 void clasificador::clasificarArchivoDeComentarios()
-{	
+{
 	ifstream archivoComentarios;
 	archivoComentarios.open(nom_ArchivoComentarios.c_str());
 	if (debug) {

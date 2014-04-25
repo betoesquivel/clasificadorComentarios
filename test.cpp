@@ -10,7 +10,7 @@
  *       Revision:  none
  *       Compiler:  gcc
  *
- *         Author:  Jose Alberto Esquivel Patino (), 
+ *         Author:  Jose Alberto Esquivel Patino (),
  *   Organization:  ITESM Campus Monterrey
  *
  * =====================================================================================
@@ -31,14 +31,14 @@ using namespace std;
 
 int main(int argc, const char *argv[])
 {
-	cout<<"Bienvenido al programa de clasificacion de comentarios."<<endl;	
-	string nArchComentarios, nArchPalabrasClave, nArchPalabrasIgnoradas, nArchSalida;  	
+	cout<<"Bienvenido al programa de clasificacion de comentarios."<<endl;
+	string nArchComentarios, nArchPalabrasClave, nArchPalabrasIgnoradas, nArchSalida;
 
 	nArchComentarios = "comentariosPrueba.txt";
 	nArchPalabrasClave = "palabrasClave.txt";
 	nArchPalabrasIgnoradas = "palabrasIgnoradas.txt";
 	nArchSalida = "salidaEjemplo.txt";
- 
+
 	// cout<<"Introduzca el nombre del archivo con los comentarios: "<<endl;
 	// cin>>nArchComentarios;
 
@@ -50,20 +50,20 @@ int main(int argc, const char *argv[])
 
 	// cout<<"Introduzca el nombre del archivo salida: "<<endl;
 	// cin>>nArchSalida;
-	
+
 	clasificador bob(nArchComentarios, nArchPalabrasClave, nArchPalabrasIgnoradas, nArchSalida);
 	bob.llenarArbolPalabrasClave();
-	bob.llenarArbolPalabrasIgnoradas();	
-	
+	bob.llenarArbolPalabrasIgnoradas();
+
 	cout<<"Estas son las palabras clave: "<<endl;
 	bob.desplegarPalabrasClave();
-	
+
 	cout<<"Estas son las categorias: "<<endl;
 	bob.desplegarCategorias();
-	
+
 	cout<<"Estas son las palabras ignoradas: "<<endl;
 	bob.desplegarPalabrasIgnoradas();
-	
+
 	bob.clasificarArchivoDeComentarios();
 	cout<<endl;
 	cout<<"========================================================================"<<endl;
